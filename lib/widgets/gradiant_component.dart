@@ -1,4 +1,4 @@
-import 'package:examen_movil/constants/constants.dart';
+import 'package:examen_movil/const/const.dart';
 import 'package:flutter/material.dart';
 
 class GradiantWidget extends StatelessWidget {

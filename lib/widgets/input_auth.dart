@@ -1,3 +1,4 @@
+import 'package:examen_movil/const/const.dart';
 import 'package:flutter/material.dart';
 
 class InputAuth extends StatelessWidget {
@@ -6,10 +7,17 @@ class InputAuth extends StatelessWidget {
   final String labeltext;
   final IconData icon;
   final bool isPassword;
+  final Function validatorFunction;
   Size _size;
 
-  InputAuth(this.type, this.controller, this.labeltext, this.icon,
-      {this.isPassword = false});
+  InputAuth(
+    this.type,
+    this.controller,
+    this.labeltext,
+    this.icon,
+    this.validatorFunction, {
+    this.isPassword = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +34,12 @@ class InputAuth extends StatelessWidget {
           border: Border.all(
             color: Colors.white,
           )),
-      child: TextField(
+      child: TextFormField(
+        validator: validatorFunction,
         obscureText: isPassword,
         keyboardType: type,
         controller: controller,
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: Colors.white, fontSize: 20.0),
         cursorColor: Colors.white,
         decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(
@@ -39,9 +48,15 @@ class InputAuth extends StatelessWidget {
           focusedBorder: UnderlineInputBorder(
             borderSide: noBorder,
           ),
+          errorBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: kErrorColor)),
           focusColor: Colors.white,
           labelText: labeltext,
           labelStyle: TextStyle(color: Colors.white),
+          errorStyle: TextStyle(
+            color: kErrorColor,
+            fontWeight: FontWeight.bold,
+          ),
           prefixIcon: Icon(
             icon,
             color: Colors.white,

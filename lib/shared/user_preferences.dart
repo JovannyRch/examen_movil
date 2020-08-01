@@ -2,7 +2,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPrefrences {
   static final UserPrefrences _instance = new UserPrefrences._internal();
-  bool _user;
 
   UserPrefrences._internal();
   SharedPreferences _prefs;
@@ -11,12 +10,12 @@ class UserPrefrences {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  get username {
-    return _prefs.getString("username") ?? '';
+  get email {
+    return _prefs.getString("email") ?? '';
   }
 
-  set username(String name) {
-    _prefs.setString('username', name);
+  set email(String name) {
+    _prefs.setString('email', name);
   }
 
   get token {
@@ -28,7 +27,7 @@ class UserPrefrences {
   }
 
   get isLogged {
-    return !this.username.isEmpty;
+    return !this.email.isEmpty;
   }
 
   factory UserPrefrences() {

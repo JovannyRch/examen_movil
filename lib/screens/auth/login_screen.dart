@@ -1,9 +1,11 @@
-import 'package:examen_movil/constants/constants.dart';
+import 'package:examen_movil/const/const.dart';
+import 'package:examen_movil/utils/validatorsAuth.dart';
 import 'package:examen_movil/widgets/gradiant_component.dart';
 import 'package:examen_movil/widgets/input_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants/constants.dart';
+import '../../shared/user_preferences.dart';
+import '../../shared/user_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -14,12 +16,15 @@ class _LoginScreenState extends State<LoginScreen> {
   Size _size;
   TextEditingController _emailCtrl;
   TextEditingController _passwordCtrl;
+  UserPrefrences _userPrefrences;
+
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     _emailCtrl = new TextEditingController();
     _passwordCtrl = new TextEditingController();
+    _userPrefrences = new UserPrefrences();
     super.initState();
   }
 
@@ -39,16 +44,19 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _formContainer() {
     return Container(
       width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          _title(),
-          SizedBox(height: 80.0),
-          _emailInput(),
-          _passInput(),
-          _buttonLogin(),
-        ],
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            _title(),
+            SizedBox(height: 80.0),
+            _emailInput(),
+            _passInput(),
+            _buttonLogin(),
+          ],
+        ),
       ),
     );
   }
@@ -70,10 +78,22 @@ class _LoginScreenState extends State<LoginScreen> {
             fontSize: 20.0,
           ),
         ),
-        onPressed: () => {},
+        onPressed: onLogin,
         color: Colors.white,
       ),
     );
+  }
+
+  void onLogin() {
+    if (_formKey.currentState.validate()) {
+      //Save user session
+      _userPrefrences.email = _emailCtrl.text;
+      //Go home screen
+      Navigator.pushNamed(context, "/home");
+    } else {
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Datos inválidos")));
+    }
   }
 
   Widget _title() {
@@ -91,6 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _emailCtrl,
       "Email address",
       Icons.email,
+      validatorEmail,
     );
   }
 
@@ -100,6 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _passwordCtrl,
       "Password",
       Icons.lock,
+      validatorPassword,
       isPassword: true,
     );
   }
