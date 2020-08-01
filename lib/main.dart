@@ -1,3 +1,4 @@
+import 'package:examen_movil/const/const.dart';
 import 'package:examen_movil/routes/routes.dart';
 import 'package:examen_movil/shared/user_preferences.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primaryColor: kBaseColor,
+        scaffoldBackgroundColor: Colors.grey.shade200,
+      ),
       title: 'Examen móvil - Jovanny Rch',
       initialRoute: initialRoute,
       routes: routes,
