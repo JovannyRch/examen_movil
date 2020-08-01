@@ -2,6 +2,8 @@ import 'package:examen_movil/const/const.dart';
 import 'package:examen_movil/models/person_model.dart';
 import 'package:examen_movil/widgets/custom_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/plugin_api.dart';
+import 'package:latlong/latlong.dart';
 
 class PersonDetailsScreen extends StatelessWidget {
   static const routeName = '/person-details';
@@ -87,9 +89,40 @@ class PersonDetailsScreen extends StatelessWidget {
             color: Colors.grey,
             height: 200,
             width: _size.width * 0.9,
+            child: _map(),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _map() {
+    return FlutterMap(
+      options: new MapOptions(
+        center: new LatLng(51.5, -0.09),
+        zoom: 13.0,
+      ),
+      layers: [
+        new TileLayerOptions(
+            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            subdomains: ['a', 'b', 'c']),
+        new MarkerLayerOptions(
+          markers: [
+            new Marker(
+              width: 80.0,
+              height: 80.0,
+              point: new LatLng(51.5, -0.09),
+              builder: (ctx) => new Container(
+                child: Icon(
+                  Icons.pin_drop,
+                  color: Colors.red,
+                  size: 30.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

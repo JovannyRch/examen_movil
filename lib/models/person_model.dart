@@ -23,6 +23,7 @@ class People {
 }
 
 class Person {
+  int id;
   String name;
   String image;
   String email;
@@ -35,6 +36,7 @@ class Person {
   Random _random;
 
   Person({
+    this.id,
     this.name,
     this.image,
     this.email,
@@ -67,6 +69,7 @@ class Person {
   }
 
   Person.fromDB(Map<String, dynamic> json) {
+    id = json["id"];
     name = json["name"];
     image = json["image"];
     email = json["email"];
@@ -75,8 +78,21 @@ class Person {
     state = json["state"];
     postcode = json["postcode"];
     phone = json["phone"];
-    rating = json["ratin"];
+    rating = json["rating"];
   }
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "image": image,
+        "email": email,
+        "street": street,
+        "city": city,
+        "state": state,
+        "postcode": postcode,
+        "phone": phone,
+        "rating": rating,
+      };
 
   double _createRating() {
     _random = new Random();

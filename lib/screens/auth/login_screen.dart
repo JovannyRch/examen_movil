@@ -3,6 +3,9 @@ import 'package:examen_movil/utils/validatorsAuth.dart';
 import 'package:examen_movil/widgets/gradiant_component.dart';
 import 'package:examen_movil/widgets/input_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:local_auth/auth_strings.dart';
+import 'package:local_auth/local_auth.dart';
 
 import '../../shared/user_preferences.dart';
 
@@ -17,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _emailCtrl;
   TextEditingController _passwordCtrl;
   UserPrefrences _userPrefrences;
-
+  LocalAuthentication _authentication = new LocalAuthentication();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -25,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailCtrl = new TextEditingController();
     _passwordCtrl = new TextEditingController();
     _userPrefrences = new UserPrefrences();
+    _authenticate();
     super.initState();
   }
 
@@ -39,6 +43,22 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _authenticate() async {
+    bool isAuthenticated = false;
+    try {
+      isAuthenticated = await _authentication.authenticateWithBiometrics(
+        localizedReason: "Inicia sesión con tu huella",
+        useErrorDialogs: true,
+        stickyAuth: false,
+      );
+      if (isAuthenticated) {
+        Navigator.pushNamed(context, "/home");
+      } //print(isAuthenticated);
+    } on PlatformException catch (e) {
+      //print(e);
+    }
   }
 
   Widget _formContainer() {
@@ -90,9 +110,6 @@ class _LoginScreenState extends State<LoginScreen> {
       _userPrefrences.email = _emailCtrl.text;
       //Go home screen
       Navigator.pushNamed(context, "/home");
-    } else {
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text("Datos inválidos")));
     }
   }
 

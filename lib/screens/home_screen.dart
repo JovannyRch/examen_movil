@@ -1,5 +1,8 @@
+import 'dart:isolate';
+
 import 'package:examen_movil/models/person_model.dart';
 import 'package:examen_movil/providers/data_provider.dart';
+import 'package:examen_movil/providers/db_provider.dart';
 import 'package:examen_movil/screens/person/person_details_screen.dart';
 import 'package:examen_movil/widgets/custom_widgets.dart';
 import 'package:examen_movil/widgets/person_card.dart';
@@ -21,7 +24,29 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   ActionsMenu _selection;
   UserPrefrences _userPrefrences = new UserPrefrences();
-  DataProvider _provider = DataProvider();
+  DataProvider _dataProvider = DataProvider();
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    //Verify Data From DB
+    checkDB();
+    super.initState();
+  }
+
+  void checkDB() async {
+    isLoading = true;
+    int total = await DBProvider.db.total();
+    if (total == 0) {
+      List<Person> newData = await _dataProvider.getPeople();
+      newData.forEach((p) {
+        DBProvider.db.newPerson(p);
+      });
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +57,19 @@ class _HomeScreenState extends State<HomeScreen> {
           _popUpMenu(),
         ],
       ),
-      body: _listPeople(),
+      body: isLoading ? _loader() : _listPeople(),
+    );
+  }
+
+  Widget _loader() {
+    return Center(
+      child: CircularProgressIndicator(),
     );
   }
 
   Widget _listPeople() {
     return FutureBuilder<List<Person>>(
-        future: _provider.getPeople(),
+        future: DBProvider.db.getPeople(),
         initialData: [],
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
@@ -49,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           } else {
             List<Person> people = snapshot.data;
+
             return ListView.builder(
               physics: BouncingScrollPhysics(),
               itemCount: people.length,
