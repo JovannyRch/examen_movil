@@ -11,10 +11,8 @@ void main() async {
   //Validamos si el usuario esta ya autentificado
   String initialRoute;
   if (userPrefrences.isLogged) {
-    print("El usuario tiene sesion");
     initialRoute = "/home";
   } else {
-    print("El usuario no tiene sesion");
     initialRoute = "/login";
   }
 
