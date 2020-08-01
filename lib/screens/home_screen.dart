@@ -1,7 +1,13 @@
-import 'package:examen_movil/screens/person/person_details.dart';
+import 'package:examen_movil/models/person_model.dart';
+import 'package:examen_movil/providers/data_provider.dart';
+import 'package:examen_movil/screens/person/person_details_screen.dart';
 import 'package:examen_movil/widgets/custom_widgets.dart';
 import 'package:examen_movil/widgets/person_card.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../shared/user_preferences.dart';
+import 'auth/login_screen.dart';
 
 enum ActionsMenu { logout }
 
@@ -14,6 +20,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ActionsMenu _selection;
+  UserPrefrences _userPrefrences = new UserPrefrences();
+  DataProvider _provider = DataProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +32,41 @@ class _HomeScreenState extends State<HomeScreen> {
           _popUpMenu(),
         ],
       ),
-      body: ListView.builder(
-        itemBuilder: (context, item) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, PersonDetailsScreen.routeName);
-            },
-            child: PersonCard(),
-          );
-        },
-        itemCount: 5,
-      ),
+      body: _listPeople(),
     );
+  }
+
+  Widget _listPeople() {
+    return FutureBuilder<List<Person>>(
+        future: _provider.getPeople(),
+        initialData: [],
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            List<Person> people = snapshot.data;
+            return ListView.builder(
+              physics: BouncingScrollPhysics(),
+              itemCount: people.length,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  child: PersonCard(people[index]),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      PersonDetailsScreen.routeName,
+                      arguments: people[index],
+                    );
+                  },
+                );
+              },
+            );
+          }
+        });
   }
 
   Widget _popUpMenu() {
@@ -51,6 +82,10 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _selection = result;
         });
+        if (_selection == ActionsMenu.logout) {
+          _userPrefrences.email = '';
+          Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+        }
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<ActionsMenu>>[
         const PopupMenuItem<ActionsMenu>(

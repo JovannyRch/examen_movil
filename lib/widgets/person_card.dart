@@ -1,13 +1,17 @@
 import 'package:examen_movil/const/const.dart';
+import 'package:examen_movil/models/person_model.dart';
 import 'package:flutter/material.dart';
 
 class PersonCard extends StatelessWidget {
-  const PersonCard({Key key}) : super(key: key);
+  final Person person;
+  Size _size;
+  PersonCard(this.person);
 
   @override
   Widget build(BuildContext context) {
+    _size = MediaQuery.of(context).size;
     return Container(
-      height: 130.0,
+      height: 150.0,
       margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -23,7 +27,7 @@ class PersonCard extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          _picture(),
+          _picture(person.image),
           _details(),
         ],
       ),
@@ -38,12 +42,12 @@ class PersonCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
-            children: <Widget>[_name("Jovanny Rchasdh"), _rating(4.5)],
+            children: <Widget>[_name(person.name), _rating(person.rating)],
           ),
           SizedBox(height: 5.0),
-          _email("jovannyrch@gmail.com"),
+          _email(person.email),
           SizedBox(height: 15.0),
-          _address("St. Bronxlyn 212"),
+          _address(person.street),
         ],
       ),
     );
@@ -56,12 +60,15 @@ class PersonCard extends StatelessWidget {
           Icons.pin_drop,
           color: Colors.grey,
         ),
-        Text(
-          value,
-          style: TextStyle(
-            color: Colors.grey,
-            fontSize: 17.0,
-            fontWeight: FontWeight.bold,
+        Container(
+          width: _size.width * 0.5,
+          child: Text(
+            value,
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 17.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         )
       ],
@@ -69,12 +76,16 @@ class PersonCard extends StatelessWidget {
   }
 
   Widget _email(String value) {
-    return Text(
-      value,
-      style: TextStyle(
-        color: kBaseColor,
-        fontSize: 18.0,
-        fontWeight: FontWeight.bold,
+    return Container(
+      width: _size.width * 0.55,
+      child: Text(
+        person.email,
+        style: TextStyle(
+          color: kBaseColor,
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+        ),
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
@@ -100,6 +111,7 @@ class PersonCard extends StatelessWidget {
 
   Widget _name(String name) {
     return Container(
+      width: _size.width * 0.45,
       child: Text(
         name,
         style: TextStyle(
@@ -110,7 +122,7 @@ class PersonCard extends StatelessWidget {
     );
   }
 
-  Widget _picture() {
+  Widget _picture(String url) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
@@ -120,8 +132,7 @@ class PersonCard extends StatelessWidget {
           shape: BoxShape.circle,
           image: DecorationImage(
             fit: BoxFit.fill,
-            image: NetworkImage(
-                "https://randomuser.me/api/portraits/med/men/4.jpg"),
+            image: NetworkImage(url),
           ),
         ),
       ),

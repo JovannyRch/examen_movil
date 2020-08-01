@@ -11,6 +11,15 @@ class People {
       people.add(person);
     });
   }
+
+  People.fromDB(List<dynamic> jsonList) {
+    if (jsonList == null) return;
+
+    jsonList.forEach((item) {
+      final person = Person.fromJsonMap(item);
+      people.add(person);
+    });
+  }
 }
 
 class Person {
@@ -49,79 +58,32 @@ class Person {
     name = "${nameData['title']} ${nameData['first']} ${nameData['last']} ";
     image = picture;
     email = json["email"];
-    street = streetData["number"] + " " + streetData["name"];
+    street = streetData["number"].toString() + " " + streetData["name"];
     city = location["city"];
     state = location["state"];
-    postcode = location["postcode"];
+    postcode = location["postcode"].toString();
     phone = json["phone"];
+    rating = _createRating();
+  }
+
+  Person.fromDB(Map<String, dynamic> json) {
+    name = json["name"];
+    image = json["image"];
+    email = json["email"];
+    street = json["street"];
+    city = json["city"];
+    state = json["state"];
+    postcode = json["postcode"];
+    phone = json["phone"];
+    rating = json["ratin"];
   }
 
   double _createRating() {
+    _random = new Random();
     int sum = 0;
     for (int i = 0; i < 10; ++i) {
-      sum = _random.nextInt(10);
+      sum += _random.nextInt(5);
     }
     return double.parse((sum / 10).toStringAsFixed(1));
   }
 }
-
-/*
-{
-            "gender": "female",
-            "name": {
-                "title": "Mrs",
-                "first": "Ellen",
-                "last": "Hanka"
-            },
-            "location": {
-                "street": {
-                    "number": 341,
-                    "name": "Pispalan Valtatie"
-                },
-                "city": "Lempäälä",
-                "state": "Southern Savonia",
-                "country": "Finland",
-                "postcode": 84018,
-                "coordinates": {
-                    "latitude": "-7.5682",
-                    "longitude": "118.9655"
-                },
-                "timezone": {
-                    "offset": "-3:30",
-                    "description": "Newfoundland"
-                }
-            },
-            "email": "ellen.hanka@example.com",
-            "login": {
-                "uuid": "2185097d-d037-4704-ba86-876207aa931a",
-                "username": "greenleopard532",
-                "password": "laetitia",
-                "salt": "alBCatCO",
-                "md5": "39d6ec9047968db93ffa40c90205e4e6",
-                "sha1": "485a6c45e7013c7b8e5f6577c598431bda1ae417",
-                "sha256": "dd7f94b517f160e5cc60f9031a034eb9f3206e0ab267138a4894a6f96d668193"
-            },
-            "dob": {
-                "date": "1966-10-09T20:12:06.523Z",
-                "age": 54
-            },
-            "registered": {
-                "date": "2004-07-30T03:01:33.881Z",
-                "age": 16
-            },
-            "phone": "05-665-206",
-            "cell": "046-474-70-36",
-            "id": {
-                "name": "HETU",
-                "value": "NaNNA032undefined"
-            },
-            "picture": {
-                "large": "https://randomuser.me/api/portraits/women/0.jpg",
-                "medium": "https://randomuser.me/api/portraits/med/women/0.jpg",
-                "thumbnail": "https://randomuser.me/api/portraits/thumb/women/0.jpg"
-            },
-            "nat": "FI"
-        },
-
-
-*/

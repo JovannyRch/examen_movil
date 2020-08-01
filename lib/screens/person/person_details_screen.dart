@@ -1,16 +1,21 @@
 import 'package:examen_movil/const/const.dart';
+import 'package:examen_movil/models/person_model.dart';
 import 'package:examen_movil/widgets/custom_widgets.dart';
 import 'package:flutter/material.dart';
 
 class PersonDetailsScreen extends StatelessWidget {
   static const routeName = '/person-details';
   Size _size;
+  Person person;
 
   @override
   Widget build(BuildContext context) {
+    person = ModalRoute.of(context).settings.arguments;
+
     _size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: customAppBar("Detalle de contacto"),
+      backgroundColor: Colors.white,
       body: Stack(
         children: <Widget>[
           Column(
@@ -104,11 +109,11 @@ class PersonDetailsScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10.0),
-          _row("Calle", "1861, jan pieterszoom coenstral"),
-          _row("Ciudad", "massdriel"),
-          _row("Estado", "zeeland"),
-          _row("Código postal", "68129"),
-          _row("Teléfono", "(722) 123 1233"),
+          _row("Calle", person.street),
+          _row("Ciudad", person.city),
+          _row("Estado", person.state),
+          _row("Código postal", person.postcode),
+          _row("Teléfono", person.phone),
         ],
       ),
     );
@@ -159,11 +164,11 @@ class PersonDetailsScreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                _name("Jovanny Rch"),
+                _name(person.name),
                 SizedBox(height: 5.0),
-                _email("jovannyrch@gmai.com"),
+                _email(person.email),
                 SizedBox(height: 5.0),
-                _rating(4.7),
+                _rating(person.rating),
               ],
             )
           ],
@@ -234,8 +239,7 @@ class PersonDetailsScreen extends StatelessWidget {
           shape: BoxShape.circle,
           image: DecorationImage(
             fit: BoxFit.fill,
-            image: NetworkImage(
-                "https://randomuser.me/api/portraits/med/men/4.jpg"),
+            image: NetworkImage(person.image),
           ),
         ),
       ),
