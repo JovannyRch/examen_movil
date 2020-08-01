@@ -5,9 +5,9 @@ import 'package:examen_movil/widgets/input_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../shared/user_preferences.dart';
-import '../../shared/user_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
+  static const routeName = '/login';
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }

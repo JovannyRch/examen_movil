@@ -61,7 +61,7 @@ class Person {
     for (int i = 0; i < 10; ++i) {
       sum = _random.nextInt(10);
     }
-    return sum / 10;
+    return double.parse((sum / 10).toStringAsFixed(1));
   }
 }
 

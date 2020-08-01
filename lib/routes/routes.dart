@@ -1,7 +1,12 @@
 import 'package:examen_movil/screens/auth/login_screen.dart';
 import 'package:examen_movil/screens/home_screen.dart';
+import 'package:examen_movil/screens/person/person_details.dart';
+
+import '../screens/auth/login_screen.dart';
+import '../screens/home_screen.dart';
 
 final routes = {
-  '/login': (context) => LoginScreen(),
-  '/home': (context) => HomeScreen(),
+  LoginScreen.routeName: (context) => LoginScreen(),
+  HomeScreen.routeName: (context) => HomeScreen(),
+  PersonDetailsScreen.routeName: (context) => PersonDetailsScreen(),
 };

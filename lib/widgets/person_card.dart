@@ -68,18 +68,6 @@ class PersonCard extends StatelessWidget {
     );
   }
 
-  Widget _name(String name) {
-    return Container(
-      child: Text(
-        name,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 23.0,
-        ),
-      ),
-    );
-  }
-
   Widget _email(String value) {
     return Text(
       value,
@@ -96,7 +84,7 @@ class PersonCard extends StatelessWidget {
       children: <Widget>[
         Icon(
           Icons.star,
-          color: Colors.yellow,
+          color: Colors.yellow.shade700,
         ),
         Text(
           "$value",
@@ -107,6 +95,18 @@ class PersonCard extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+
+  Widget _name(String name) {
+    return Container(
+      child: Text(
+        name,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 23.0,
+        ),
+      ),
     );
   }
 

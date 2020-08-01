@@ -1,9 +1,13 @@
+import 'package:examen_movil/screens/person/person_details.dart';
+import 'package:examen_movil/widgets/custom_widgets.dart';
 import 'package:examen_movil/widgets/person_card.dart';
 import 'package:flutter/material.dart';
 
 enum ActionsMenu { logout }
 
 class HomeScreen extends StatefulWidget {
+  static const routeName = '/home';
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -14,26 +18,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(),
+      appBar: customAppBar(
+        "Lista de doctores",
+        actions: [
+          _popUpMenu(),
+        ],
+      ),
       body: ListView.builder(
         itemBuilder: (context, item) {
-          return PersonCard();
+          return GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, PersonDetailsScreen.routeName);
+            },
+            child: PersonCard(),
+          );
         },
         itemCount: 5,
       ),
-    );
-  }
-
-  Widget _appBar() {
-    return AppBar(
-      centerTitle: true,
-      title: Text(
-        "Lista doctores",
-        style: TextStyle(color: Colors.white),
-      ),
-      actions: <Widget>[
-        _popUpMenu(),
-      ],
     );
   }
 
